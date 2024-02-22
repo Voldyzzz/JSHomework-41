@@ -3,8 +3,22 @@ import User from "./pages/User";
 import Users from "./pages/Users";
 import CreateUser from "./pages/CreateUser";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { setUsersLS } from "./services/LocalStorage";
+import { getData } from "./services/getUsers";
+import { useEffect } from "react";
 
 function App() {
+  useEffect(() => {
+    const users = localStorage.getItem("users");
+
+    if (users == null || !Array.isArray(users)) {
+      (async () => {
+        let arrayOfUsers = await getData();
+        setUsersLS(arrayOfUsers);
+      })();
+    }
+  }, []);
+
   return (
     <div className='App'>
       <Router>

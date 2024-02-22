@@ -11,30 +11,79 @@ import UserCity from "./UserCity";
 import UserStreet from "./UserStreet";
 import Buttons from "./Buttons";
 import { getUserInfo } from "../../services/getUsers";
+import { getUserLS } from "../../services/LocalStorage";
 
 export default function UserList() {
   const [user, setUser] = useState({});
-  const param = useParams();
-  const { name, username, email, address = {} } = user;
-  console.log(address);
-  const { street, city } = address;
+  const [newUserData, setNewUserData] = useState({});
+  const [name, setName] = useState("");
+  const [username, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [street, setStreet] = useState("");
+  const [city, setCity] = useState("");
+
+  const { id } = useParams();
+  const assignValues = ({
+    name = "",
+    username = "",
+    email = "",
+    address = {},
+  }) => {
+    setName(name);
+    setUserName(username);
+    setEmail(email);
+    setStreet(address.street);
+    setCity(address.city);
+  };
 
   useEffect(() => {
     (async () => {
-      let user = await getUserInfo(param.id);
-      setUser(user);
+      let user = await getUserLS(id);
+      user.length ? setUser(user[0]) : setUser({});
     })();
   }, []);
 
+  useEffect(() => {
+    assignValues(user);
+  }, [user]);
+
+  useEffect(() => {
+    setNewUserData({
+      id: +id,
+      name: name,
+      username: username,
+      email: email,
+      address: {
+        street: street,
+        city: city,
+      },
+    });
+  }, [name, username, email, street, city]);
+
   return (
-    <div className='changeUserBlock'>
-      <h2>Change data about user</h2>
-      <UserName name={name} />
-      <UserUsername username={username} />
-      <UserEmail email={email} />
-      <UserCity city={city} />
-      <UserStreet street={street} />
-      <Buttons />
-    </div>
+    <>
+      {Object.keys(user).length ? (
+        <div className='changeUserBlock'>
+          <h2>Change data about user</h2>
+          <UserName name={name} liftName={(value) => setName(value)} />
+          <UserUsername
+            username={username}
+            liftUserName={(value) => setUserName(value)}
+          />
+          <UserEmail email={email} liftEmail={(value) => setEmail(value)} />
+          <UserCity city={city} liftCity={(value) => setCity(value)} />
+          <UserStreet
+            street={street}
+            liftStreet={(value) => setStreet(value)}
+          />
+          <Buttons
+            newUserData={newUserData}
+            changeUserInformation={(value) => setUser(value)}
+          />
+        </div>
+      ) : (
+        <h1>Data about user hasn`t founded</h1>
+      )}
+    </>
   );
 }
