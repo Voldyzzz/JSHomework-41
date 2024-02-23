@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./style.sass";
+import uniqid from "uniqid";
+import { addNewUserLS } from "../../services/LocalStorage";
 
 import Button from "@mui/material/Button";
 import Name from "./Name";
@@ -15,10 +17,39 @@ export default function CreateNewUser() {
   const [email, setEmail] = useState("");
   const [street, setStreet] = useState("");
   const [city, setCity] = useState("");
+  const [id] = useState(uniqid());
+
+  useEffect(() => {
+    setCreatedUser({
+      id: id,
+      name: name,
+      username: username,
+      email: email,
+      address: {
+        street: street,
+        city: city,
+      },
+    });
+  }, [name, username, email, street, city]);
+
+  const handleCreateUserButton = (createdUser) => {
+    addNewUserLS(createdUser);
+    window.location.href = `/`;
+  };
 
   return (
     <div className='createUserBlock'>
-      <Button style={{ margin: "10px" }} variant='contained' color='secondary'>
+      <Name liftName={(value) => setName(value)} />
+      <UserName liftUserName={(value) => setUserName(value)} />
+      <Email liftEmail={(value) => setEmail(value)} />
+      <City liftCity={(value) => setCity(value)} />
+      <Street liftStreet={(value) => setStreet(value)} />
+      <Button
+        onClick={() => handleCreateUserButton(createdUser)}
+        style={{ margin: "10px" }}
+        variant='contained'
+        color='secondary'
+      >
         Create User
       </Button>
     </div>

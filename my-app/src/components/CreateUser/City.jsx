@@ -1,6 +1,13 @@
 import React from "react";
 import TextField from "@mui/material/TextField";
 
-export default function City() {
-  return <TextField id='outlined-basic' label='Street' variant='outlined' />;
+export default function City({ liftCity }) {
+  return (
+    <TextField
+      onChange={(e) => liftCity(e.target.value)}
+      id='outlined-basic'
+      label='City'
+      variant='outlined'
+    />
+  );
 }

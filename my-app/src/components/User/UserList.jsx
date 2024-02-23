@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  useParams,
-  useRouteMatch,
-} from "react-router-dom/cjs/react-router-dom.min";
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import "./style.sass";
 import UserName from "./UserName";
 import UserUsername from "./UserUsername";
@@ -10,7 +7,7 @@ import UserEmail from "./UserEmail";
 import UserCity from "./UserCity";
 import UserStreet from "./UserStreet";
 import Buttons from "./Buttons";
-import { getUserInfo } from "../../services/getUsers";
+
 import { getUserLS } from "../../services/LocalStorage";
 
 export default function UserList() {
@@ -48,8 +45,10 @@ export default function UserList() {
   }, [user]);
 
   useEffect(() => {
+    console.log(id);
+
     setNewUserData({
-      id: +id,
+      id: id,
       name: name,
       username: username,
       email: email,

@@ -11,6 +11,12 @@ export const getUserLS = (id) => {
   return user;
 };
 
+export const addNewUserLS = (user) => {
+  const arrayOfUsers = getUsersLS();
+  arrayOfUsers.push(user);
+  setUsersLS(arrayOfUsers);
+};
+
 export const changeUserLS = (id, newUserData) => {
   const arrayOfUsers = getUsersLS();
   arrayOfUsers.map((item, index) => {

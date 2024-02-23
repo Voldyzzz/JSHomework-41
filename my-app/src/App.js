@@ -11,7 +11,7 @@ function App() {
   useEffect(() => {
     const users = localStorage.getItem("users");
 
-    if (users == null || !Array.isArray(users)) {
+    if (users == null) {
       (async () => {
         let arrayOfUsers = await getData();
         setUsersLS(arrayOfUsers);
